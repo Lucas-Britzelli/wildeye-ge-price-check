@@ -28,11 +28,12 @@ export default function SearchBar({ onSearch, getSuggestions }: SearchBarProps) 
     }
 
     /* Handle suggestion click, set the query to the clicked suggestion and call the onSearch function
-    and then clear the visible suggestions */
+    and then clear the visible suggestions aswell as the clear the search field */
     const handleSuggestionClick = (suggestion: string) => {
         setQuery(suggestion);
         onSearch(suggestion);
         setSuggestions([]);
+        setQuery("");
     }
 
     return (
