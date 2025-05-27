@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Item } from "@/types/item";
 
 type SearchBarProps = {
     onSearch: (query: string) => void;
@@ -51,19 +52,19 @@ export default function SearchBar({ onSearch, getSuggestions }: SearchBarProps) 
                 </button>
             </form>
 
-      {suggestions.length > 0 && (
-        <ul className="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded mt-1 max-h-60 overflow-y-auto">
-          {suggestions.map((item, idx) => (
-            <li
-              key={idx}
-              className="px-4 py-2 hover:bg-yellow-600 cursor-pointer text-white"
-              onClick={() => handleSuggestionClick(item)}
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      )}
+            {suggestions.length > 0 && (
+            <ul className="bg-gray-800 rounded-lg shadow-lg mt-2 max-h-64 overflow-y-auto">
+                {suggestions.map((name, index) => (
+                <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(name)}
+                    className="flex items-center px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                >
+                    <span className="text-white">{name}</span>
+                </li>
+                ))}
+            </ul>
+            )}
         </div>
     );
 }

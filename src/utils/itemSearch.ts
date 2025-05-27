@@ -1,9 +1,7 @@
 import rs3itemDump from './data/rs3itemDump.json';
+import {Item } from '@/types/item';
 
-type Item = {
-    id: number;
-    name: string;
-}
+
 
 const allItems = Object.entries(rs3itemDump).map(([id, item]: [string, any]) => ({
     id: parseInt(id, 10),
@@ -20,5 +18,4 @@ export function getItemSuggestions(query: string): string[] {
     return allItems
         .filter((item) => typeof item.name === 'string' && item.name.toLowerCase().includes(lowerQuery))
         .slice(0, 10) //Set it to an upper limit of 10 suggestions
-        .map((item) => item.name);
 }
