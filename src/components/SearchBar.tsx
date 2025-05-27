@@ -1,29 +1,68 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function SearchBar({ onSearch}: { onSearch: (query: string) => void}) {
-    const [value, setValue] = useState("");
+type SearchBarProps = {
+    onSearch: (query: string) => void;
+    getSuggestions: (query: string) => string[];
+}
 
+export default function SearchBar({ onSearch, getSuggestions }: SearchBarProps) {
+    const [query, setQuery] = useState("");
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (query.length > 1) {
+            const results = getSuggestions(query);
+            setSuggestions(results);
+        } else {
+            setSuggestions([]);
+        }
+    }, [query, getSuggestions]);
+
+    /* Handle the form submission aswell as clear the search field and visible suggestions */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSearch(value.trim());
+        onSearch(query.trim());
+        setSuggestions([]);
+        setQuery("");
     }
 
-    return(
-        <form onSubmit={handleSubmit} className="flex gap-2">
-            <input
-                type="text"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                placeholder="Search for an item"
-                className="border p-2 rounded w-full"
+    /* Handle suggestion click, set the query to the clicked suggestion and call the onSearch function
+    and then clear the visible suggestions */
+    const handleSuggestionClick = (suggestion: string) => {
+        setQuery(suggestion);
+        onSearch(suggestion);
+        setSuggestions([]);
+    }
+
+    return (
+        <div className="relative w-full">
+            <form onSubmit={handleSubmit} className="flex items-center">
+                <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search for an item..."
+                    className="w-full p-3 bg-gray-700 text-gray-200 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                 />
-                <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-                >
+                <button type="submit" className="px-4 py-2 bg-yellow-500 text-black rounded-r-lg hover:bg-yellow-600 transition">
                     Search
                 </button>
-        </form>
+            </form>
+
+      {suggestions.length > 0 && (
+        <ul className="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded mt-1 max-h-60 overflow-y-auto">
+          {suggestions.map((item, idx) => (
+            <li
+              key={idx}
+              className="px-4 py-2 hover:bg-yellow-600 cursor-pointer text-white"
+              onClick={() => handleSuggestionClick(item)}
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
+      )}
+        </div>
     );
 }

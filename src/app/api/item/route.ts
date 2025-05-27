@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { getItemByName } from '../../../utils/itemDump';
+import { getItemByName } from '../../../utils/itemSearch';
 
 
 export async function GET(req: NextRequest) {

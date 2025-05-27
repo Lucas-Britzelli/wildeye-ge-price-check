@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Scale } from "lucide-react";
 import SearchBar from "@/components/SearchBar";
+import { getItemSuggestions } from "@/utils/itemSearch";
 
 type ItemDetail = {
   id: number;
@@ -50,7 +51,7 @@ export default function Home() {
         <h1 className="flex items-center justify-center gap-3 text-3xl font-bold text-yellow-400 mb-6">
         <Scale className="w-8 h-8 text-yellow-400" /> WildEye's Price Checker <Scale className="w-8 h-8 text-yellow-400" />
         </h1>
-        <SearchBar onSearch={searchItem} />
+        <SearchBar onSearch={searchItem} getSuggestions={getItemSuggestions} />
   
         {error && (
           <p className="text-red-500 mt-4 text-center">{error}</p>
